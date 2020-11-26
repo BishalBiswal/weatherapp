@@ -4,6 +4,8 @@ window.addEventListener("load",()=>{
     let tempdeg= document.querySelector(".tempdeg");
     let tempdesc= document.querySelector(".tempdesc");
     let loctime= document.querySelector(".loctime");
+    let tempsec= document.querySelector(".temperature");
+    let tempspan= document.querySelector(".temperature span");
 if(navigator.geolocation){
      navigator.geolocation.getCurrentPosition(position =>{
         long=position.coords.longitude;
@@ -23,13 +25,30 @@ if(navigator.geolocation){
             tempdesc.textContent=summary;
             loctime.textContent=data.timezone;
             setIcons(icon, document.querySelector(".icon"));
+
+            let celsius=((temperature-32)*(5/9));
+
+            tempsec.addEventListener("click",()=>{
+                if(tempspan.textContent=="F"){
+                    tempspan.textContent="C";
+                    tempdeg.textContent=Math.floor(celsius);
+                }
+                else{
+                    tempspan.textContent="F";     
+                    tempdeg.textContent=temperature;            
+                }
+            })
         });
      });
   }
+else{
+    document.write("gimme permissions first");
+}
   const setIcons = (icon, iconID) =>{
-      const skycons= new Skycons({color:"wheat"});
+      const skycons= new Skycons({color:"gray"});
       const currentIcon=icon.replace(/-/g,"_").toUpperCase();
       skycons.play();
       return skycons.set(iconID,Skycons[currentIcon]);
   }
+  
 });
